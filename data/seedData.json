@@ -1,0 +1,164 @@
+{
+  "users": [
+    {
+      "email": "john.doe@example.com",
+      "password": "password12345",
+      "confirmPassword": "password12345",
+      "createdAt": "2025-01-15T00:00:00.000Z"
+    },
+    {
+      "email": "jane.smith@example.com",
+      "password": "securepass12345",
+      "confirmPassword": "securepass12345",
+      "createdAt": "2025-02-10T00:00:00.000Z"
+    },
+    {
+      "email": "mike.wilson@example.com",
+      "password": "mikepass12345",
+      "confirmPassword": "mikepass12345",
+      "createdAt": "2025-03-05T00:00:00.000Z"
+    }
+  ],
+  "expenses": [
+    {
+      "expenseCategory": "Food",
+      "expenseDescription": "Grocery shopping at Whole Foods",
+      "expenseAmount": 85.75,
+      "date": "2025-07-01T00:00:00.000Z",
+      "user": "USER_ID_1"
+    },
+    {
+      "expenseCategory": "Transport",
+      "expenseDescription": "Monthly bus pass",
+      "expenseAmount": 45.00,
+      "date": "2025-07-05T00:00:00.000Z",
+      "user": "USER_ID_1"
+    },
+    {
+      "expenseCategory": "Entertainment",
+      "expenseDescription": "Movie tickets and popcorn",
+      "expenseAmount": 32.50,
+      "date": "2025-07-10T00:00:00.000Z",
+      "user": "USER_ID_1"
+    },
+    {
+      "expenseCategory": "Utilities",
+      "expenseDescription": "Electricity bill",
+      "expenseAmount": 75.20,
+      "date": "2025-07-15T00:00:00.000Z",
+      "user": "USER_ID_1"
+    },
+    {
+      "expenseCategory": "HealthCare",
+      "expenseDescription": "Pharmacy - prescription medication",
+      "expenseAmount": 45.99,
+      "date": "2025-07-18T00:00:00.000Z",
+      "user": "USER_ID_1"
+    },
+    {
+      "expenseCategory": "Food",
+      "expenseDescription": "Dinner at Italian restaurant",
+      "expenseAmount": 65.30,
+      "date": "2025-07-20T00:00:00.000Z",
+      "user": "USER_ID_1"
+    },
+    {
+      "expenseCategory": "Others",
+      "expenseDescription": "Birthday gift for friend",
+      "expenseAmount": 50.00,
+      "date": "2025-07-22T00:00:00.000Z",
+      "user": "USER_ID_1"
+    },
+    {
+      "expenseCategory": "Transport",
+      "expenseDescription": "Gas for car",
+      "expenseAmount": 42.75,
+      "date": "2025-07-25T00:00:00.000Z",
+      "user": "USER_ID_1"
+    },
+    {
+      "expenseCategory": "Food",
+      "expenseDescription": "Weekly groceries",
+      "expenseAmount": 120.45,
+      "date": "2025-07-02T00:00:00.000Z",
+      "user": "USER_ID_2"
+    },
+    {
+      "expenseCategory": "Transport",
+      "expenseDescription": "Uber rides",
+      "expenseAmount": 35.80,
+      "date": "2025-07-07T00:00:00.000Z",
+      "user": "USER_ID_2"
+    },
+    {
+      "expenseCategory": "Entertainment",
+      "expenseDescription": "Concert tickets",
+      "expenseAmount": 95.00,
+      "date": "2025-07-12T00:00:00.000Z",
+      "user": "USER_ID_2"
+    },
+    {
+      "expenseCategory": "Utilities",
+      "expenseDescription": "Internet bill",
+      "expenseAmount": 59.99,
+      "date": "2025-07-16T00:00:00.000Z",
+      "user": "USER_ID_2"
+    },
+    {
+      "expenseCategory": "Food",
+      "expenseDescription": "Lunch with colleagues",
+      "expenseAmount": 28.75,
+      "date": "2025-07-19T00:00:00.000Z",
+      "user": "USER_ID_2"
+    },
+    {
+      "expenseCategory": "HealthCare",
+      "expenseDescription": "Dentist appointment",
+      "expenseAmount": 150.00,
+      "date": "2025-07-21T00:00:00.000Z",
+      "user": "USER_ID_2"
+    },
+    {
+      "expenseCategory": "Others",
+      "expenseDescription": "Home office supplies",
+      "expenseAmount": 85.50,
+      "date": "2025-07-24T00:00:00.000Z",
+      "user": "USER_ID_2"
+    },
+    {
+      "expenseCategory": "Food",
+      "expenseDescription": "Takeout dinner",
+      "expenseAmount": 22.95,
+      "date": "2025-07-03T00:00:00.000Z",
+      "user": "USER_ID_3"
+    },
+    {
+      "expenseCategory": "Entertainment",
+      "expenseDescription": "Gaming subscription",
+      "expenseAmount": 14.99,
+      "date": "2025-07-08T00:00:00.000Z",
+      "user": "USER_ID_3"
+    },
+    {
+      "expenseCategory": "Utilities",
+      "expenseDescription": "Water bill",
+      "expenseAmount": 38.50,
+      "date": "2025-07-14T00:00:00.000Z",
+      "user": "USER_ID_3"
+    },
+    {
+      "expenseCategory": "Transport",
+      "expenseDescription": "Car maintenance",
+      "expenseAmount": 210.75,
+      "date": "2025-07-17T00:00:00.000Z",
+      "user": "USER_ID_3"
+    },
+    {
+      "expenseCategory": "HealthCare",
+      "expenseDescription": "Gym membership",
+      "expenseAmount": 65.00,
+      "date": "2025-07-23T00:00:00.000Z",
+      "user": "USER_ID_3"
+    }
+  ]
+}

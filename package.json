@@ -6,7 +6,8 @@
   "scripts": {
     "start": "nodemon server.js -- --host",
     "start:prod": "cross-env NODE_ENV=production nodemon server.js -- --host",
-    "debug": "ndb server.js"
+    "debug": "ndb server.js",
+    "seed": "node data/seedData.js"
   },
   "keywords": [],
   "author": "",

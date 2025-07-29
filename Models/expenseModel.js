@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const expenseSchema = new mongoose.Schema({
   expenseCategory: {
@@ -16,6 +16,9 @@ const expenseSchema = new mongoose.Schema({
     },
     required: [true, 'Expense type is required'],
   },
+  expenseDescription: {
+    type: String,
+  },
   expenseAmount: {
     type: Number,
     required: [true, 'Expense amount is required'],
@@ -32,4 +35,4 @@ const expenseSchema = new mongoose.Schema({
 });
 
 const Expense = mongoose.model('Expense', expenseSchema);
-module.exports = Expense;
+export default Expense;
