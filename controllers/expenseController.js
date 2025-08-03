@@ -102,3 +102,32 @@ export const createExpense = catchAsync(async (req, res, next) => {
 
   response(res, 201, 'Expense created successfully', expense);
 });
+
+// To sort the user expenses category-wise
+export const sortUserExpenses = catchAsync(async (req, res, next) => {
+  const aggregationPipeline = [
+    {
+      $match: { user: req.user._id },
+    },
+    {
+      $group: {
+        _id: '$expenseCategory',
+        totalAmount: { $sum: '$expenseAmount' },
+        totalExpenses: { $sum: 1 }, // Count the number of the expenses
+        expenses: { $push: '$$ROOT' }, // Push the entire expense Amount
+      },
+    },
+  ];
+
+  const sortedExpenses = await Expense.aggregate(aggregationPipeline);
+
+  if (sortedExpenses.length === 0) {
+    return next(new AppError('No expenses found for the user!', 404));
+  }
+  response(
+    res,
+    200,
+    'Expenses sorted by category successfully',
+    sortedExpenses,
+  );
+});
