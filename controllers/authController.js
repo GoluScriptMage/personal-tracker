@@ -8,12 +8,14 @@ import { promisify } from 'util';
 import sendEmail from '../utils/emails/SendEmail.js';
 import crypto from 'crypto';
 
+// Function to sign the JWT token
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
 };
 
+// Function to set the jwt token in the cookie
 const createSendToken = (res, token, statusCode, user) => {
   const cookieOptions = {
     expiresIn: new Date(
