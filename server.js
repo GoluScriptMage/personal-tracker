@@ -11,19 +11,30 @@ const dbURL = process.env.MONGODB_URL.replace(
   process.env.MONGODB_PASSWORD,
 );
 
+process.on('uncaughtException', (err) => {
+  console.log('Uncaught Exception Shutting down...');
+  console.error(err.name, err.message);
+  process.exit(1); // Exit with failure
+});
+
 mongoose
   .connect(dbURL)
   .then(() => {
     console.log('Connected to MongoDB');
-  })
-  .catch((err) => {
-    console.error('Error connecting to MongoDB:', err);
   });
 
 console.log(`${process.env.NODE_ENV} mode `);
 
 const port = process.env.PORT || 3001;
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
+});
+
+process.on('unhandledRejection', (err) => {
+  console.error('UNHANDLED REJECTION! Shutting down...');
+  console.error(err.name, err.message);
+  server.close(() => {
+    process.exit(1); // Exit after server closes
+  });
 });

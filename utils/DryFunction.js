@@ -8,15 +8,25 @@ export const response = (
   status = 'success',
 ) => {
   res.status(statusCode).json({
+    result: data ? data.length : 0,
     status: status,
     message: message,
     data: data || null,
   });
 };
 
-export const valdidateResourceExists = (data, type, next, msg = 'Invalid data') => {
+export const valdidateResourceExists = (
+  data,
+  type,
+  next,
+  msg = 'Invalid data',
+) => {
   // Explicitly check for null, undefined, or empty array
-  if (data === null || data === undefined || (Array.isArray(data) && data.length === 0)) {
+  if (
+    data === null ||
+    data === undefined ||
+    (Array.isArray(data) && data.length === 0)
+  ) {
     switch (type) {
       case 'id': {
         return next(new AppError('User ID is required', 400));

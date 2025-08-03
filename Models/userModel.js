@@ -12,6 +12,7 @@ const userSchema = new mongoose.Schema({
       message: 'Please provide valid email address',
     },
     unique: true,
+    // index: true, // Index for faster lookups
   },
   password: {
     type: String,
@@ -98,10 +99,19 @@ userSchema.methods.createResetToken = function () {
     .update(resetToken)
     .digest('hex');
 
-  this.passwordResetExpires = Date.now + 10 * 60 * 1000;
+  this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
 
   return resetToken;
 };
+
+// Indexes for faster lookups
+userSchema.index({
+  passwordResetToken: 1,
+  passwordResetExpires: 1,
+}); // For password reset token and expiration both together lookups
+userSchema.index({
+  createdAt: -1,
+}); // -1 for descending order and created at for the User date of creation
 
 const User = mongoose.model('User', userSchema);
 

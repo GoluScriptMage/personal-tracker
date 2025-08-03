@@ -1,6 +1,3 @@
-import catchAsync from './catchAsync';
-import Expense from '../Models/expenseModel';
-
 class ApiFeatures {
   constructor(query, queryString) {
     this.query = query;

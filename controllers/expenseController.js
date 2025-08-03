@@ -2,6 +2,7 @@ import catchAsync from '../utils/catchAsync.js';
 import AppError from '../utils/appError.js';
 import Expense from '../Models/expenseModel.js';
 import { response, valdidateResourceExists } from '../utils/DryFunction.js';
+import ApiFeatures from '../utils/apiFeatures.js';
 
 // To get the expense
 export const getExpense = catchAsync(async (req, res, next) => {
@@ -18,9 +19,24 @@ export const getExpense = catchAsync(async (req, res, next) => {
 
 // To get all expense
 export const getAllExpense = catchAsync(async (req, res, next) => {
-  const expenses = await Expense.find();
-  valdidateResourceExists(expenses.length > 0, 'expense', next);
-  response(res, 200, 'Expenses retrieved successfully', expenses);
+  console.log('User id: ', req.user._id);
+
+  // don't use await here bcz we need to send the query not the result
+  const query = Expense.find({ user: req.user._id });
+
+  const features = new ApiFeatures(query, req.query)
+    .filter()
+    .sort()
+    .fields()
+    .pagination();
+
+  const userExpenses = await features.query;
+
+  if (userExpenses.length < 1) {
+    return next(new AppError('No expenses found for the user!', 404));
+  }
+
+  response(res, 200, 'Expenses retrieved successfully', userExpenses);
 });
 
 // To delete the expense
@@ -39,7 +55,7 @@ export const updateExpense = catchAsync(async (req, res, next) => {
 
   const currentExpense = await Expense.findById(id);
   if (!currentExpense) {
-    return next(new AppError('Expense not found!', 404));
+    return next(new AppError('Expense not found or not authorized!', 404));
   }
 
   const {
@@ -50,18 +66,20 @@ export const updateExpense = catchAsync(async (req, res, next) => {
   } = req.body;
 
   const updatedExpense = await Expense.findByIdAndUpdate(
-    id,    // First: the ID we want to update
-    {      // Second: the fields to update
+    id, // First: the ID we want to update
+    {
+      // Second: the fields to update
       expenseCategory,
       expenseAmount,
       expenseDescription,
       date,
-      userId: currentExpense.userId,
+      user: req.user._id,
     },
-    {      // Third: options
+    {
+      // Third: options
       new: true,
       runValidators: true,
-    }
+    },
   );
 
   response(res, 200, 'Expense updated successfully', updatedExpense);
@@ -77,7 +95,7 @@ export const createExpense = catchAsync(async (req, res, next) => {
     expenseDescription,
     expenseAmount,
     date,
-    userId,
+    user: req.user._id, // Use the logged-in user's ID
   });
 
   valdidateResourceExists(expense, 'expense', next);

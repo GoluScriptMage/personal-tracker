@@ -4,19 +4,31 @@
       "email": "john.doe@example.com",
       "password": "password12345",
       "confirmPassword": "password12345",
-      "createdAt": "2025-01-15T00:00:00.000Z"
+      "createdAt": "2025-01-15T00:00:00.000Z",
+      "role": "user",
+      "passwordChangedAt": null,
+      "passwordResetToken": null,
+      "passwordResetExpires": null
     },
     {
       "email": "jane.smith@example.com",
       "password": "securepass12345",
       "confirmPassword": "securepass12345",
-      "createdAt": "2025-02-10T00:00:00.000Z"
+      "createdAt": "2025-02-10T00:00:00.000Z",
+      "role": "admin",
+      "passwordChangedAt": null,
+      "passwordResetToken": null,
+      "passwordResetExpires": null
     },
     {
       "email": "mike.wilson@example.com",
       "password": "mikepass12345",
       "confirmPassword": "mikepass12345",
-      "createdAt": "2025-03-05T00:00:00.000Z"
+      "createdAt": "2025-03-05T00:00:00.000Z",
+      "role": "user",
+      "passwordChangedAt": null,
+      "passwordResetToken": null,
+      "passwordResetExpires": null
     }
   ],
   "expenses": [

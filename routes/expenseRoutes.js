@@ -6,19 +6,21 @@ import {
   getExpense,
   updateExpense,
 } from '../controllers/expenseController.js';
-import { signup } from '../controllers/authController.js';
+import { protect, restrictTo, signup } from '../controllers/authController.js';
 
 const router = express.Router();
 
 // TO get the expense and create a new Expense
-router.route('/').get(getAllExpense).post(createExpense);
+router.route('/').get(protect, getAllExpense).post(protect, createExpense);
 
+// Top high amount of expense
+router.route('/top-expense').get(protect, () => {});
 
 // To update the expense and delete the Expense
 router
   .route('/:id')
-  .get(getExpense)
-  .delete(deleteExpenses)
-  .patch(updateExpense);
+  .get(protect, getExpense)
+  .delete(protect, restrictTo('admin'), deleteExpenses)
+  .patch(protect, updateExpense);
 
 export default router;
