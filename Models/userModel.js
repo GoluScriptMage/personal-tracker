@@ -53,6 +53,12 @@ const userSchema = new mongoose.Schema({
     type: Date,
     select: false,
   },
+  emailVerificationToken: String,
+  emailVerificationExpires: Date,
+  isVerified: {
+    type: Boolean,
+    default: false, // User is not verified by the default
+  },
 });
 
 // MiddleWares
@@ -112,6 +118,10 @@ userSchema.index({
 userSchema.index({
   createdAt: -1,
 }); // -1 for descending order and created at for the User date of creation
+userSchema.index({
+  emailVerificationToken: 1,
+  emailVerificationExpires: 1,
+});
 
 const User = mongoose.model('User', userSchema);
 

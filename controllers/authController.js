@@ -85,7 +85,10 @@ export const login = catchAsync(async (req, res, next) => {
 //  To cofirm the user is logged in or had jwt
 export const protect = catchAsync(async (req, res, next) => {
   // check if the token exists in req headers
-  if (!req.headers.authorization || !req.headers.authorization.startsWith('Bearer')) {
+  if (
+    !req.headers.authorization ||
+    !req.headers.authorization.startsWith('Bearer')
+  ) {
     return next(
       new AppError('You are not logged in. Please log in to get access', 401),
     );
@@ -230,5 +233,103 @@ export const resetPassword = catchAsync(async (req, res, next) => {
 });
 
 // To logout the user
+export const logout = catchAsync(async (req, res, next) => {
+  // Clear the jwt token in the cookie
+  res.cookie('jwt', 'loggedOut', {
+    expiresIn: new Date(Date.now() + 10 * 1000), // Set a short expiry time
+    httpOnly: true, // Prevent client side access
+  });
 
-// To verify the user email (email verification)
+  response(res, 200, 'Logged Out Successfully');
+});
+
+// To verify the user email (email verification) --- (via frontend)
+export const emailVerifyTokenSend = catchAsync(async (req, res, next) => {
+  const user = req.user;
+  if (!user) {
+    return next(new AppError('User not found!', 404));
+  }
+
+  // Create the emailVerification token and save the hashed -v in dbURL
+  const emailVerifyToken = user.createResetToken();
+
+  const hashedToken = crypto
+    .createHash('sha256')
+    .update(emailVerifyToken)
+    .digest('hex');
+
+  user.emailVerificationToken = hashedToken;
+  user.emailVerificationExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 min expiry for token
+
+  // Save them to the user
+  await user.save({ validateBeforeSave: false });
+
+  // create the message and url
+  const reqUrl = `${req.protocol}://${req.get('host')}/api/v1/auth/verify-email/${emailVerifyToken}`;
+  const message = `Please verify your email by clicking on the following link: ${reqUrl}`;
+
+  // Send it to user email
+  const options = {
+    email: user.email,
+    subject: 'Email Verification Token',
+    message,
+  };
+
+  try {
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`Sending verification email to ${user.email}`);
+      console.log('Email Verification Token:', emailVerifyToken);
+    }
+    await sendEmail(options);
+    response(
+      res,
+      200,
+      'Verification email sent successfully. Please check your inbox.',
+    );
+  } catch {
+    user.emailVerificationExpires = undefined;
+    user.emailVerificationToken = undefined;
+    await user.save({ validateBeforeSave: false });
+    console.error('Failed to send verification email:', error);
+    return next(
+      new AppError(
+        'Failed to send verification email. Please try again later.',
+        500,
+      ),
+    );
+  }
+});
+
+// To verify that user is verified or not (via post req)
+export const emailTokenVerify = catchAsync(async (req, res, next) => {
+  // Get the token and verify its validity
+  const { token } = req.params;
+  valdidateResourceExists(
+    token,
+    'token',
+    next,
+    'Verification token is required',
+  );
+
+  // Find the user using the token
+  const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+  const user = await User.findOne({
+    emailVerificationToken: hashedToken,
+    emailVerificationExpires: {
+      $gt: Date.now(), // Check if the token has not expired
+    },
+  });
+
+  if (!user) {
+    return next(new AppError('Token is invalid or has expired', 400));
+  }
+
+  // update the user isVerified to true
+  user.isVerified = true;
+  user.emailVerificationExpires = undefined;
+  user.emailVerificationToken = undefined;
+
+  // save it to the user and  send response
+  await user.save({ validateBeforeSave: false });
+  response(res, 200, 'Email verified successfully', user);
+});
