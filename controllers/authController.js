@@ -21,6 +21,7 @@ const createSendToken = (res, token, statusCode, user) => {
     expiresIn: new Date(
       Date.now() + process.env.JWT_EXPIRES_IN * 24 * 60 * 60 * 1000,
     ), // Convert days into miliseconds
+    sameSite: 'strict', // Prevents CSRF attacks
     httpOnly: true, // Prevents client-side JavaScript from accesing the cookie
   };
 

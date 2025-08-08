@@ -16,7 +16,7 @@ const handleDuplicateKeyError = (err) => {
 // JSON web token error
 const handleJsonWebTokenError = () => {
   return new AppError('Invalid token. Please log in again!', 401);
-}
+};
 
 // Send error in the development environment
 const sendDevError = (err, res) => {
@@ -30,10 +30,17 @@ const sendDevError = (err, res) => {
 
 // Send error in the production environment
 const SendProdError = (err, res) => {
-  res.status(err.statusCode).json({
-    status: err.status || 'error',
-    message: err.message,
-  });
+  if (err.isOperational) {
+    res.status(err.statusCode).json({
+      status: err.status || 'error',
+      message: err.message,
+    });
+  } else {
+    res.status(500).json({
+      status: 'error',
+      message: 'Something went wrong! Please try again later.',
+    });
+  }
 };
 
 // Global error handler
@@ -41,7 +48,7 @@ const globalErrorHandler = (err, req, res, next) => {
   // Define the status code and status if not defined
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
-  
+
   // Check for the error environment
   if (process.env.NODE_ENV === 'development') {
     return sendDevError(err, res);
@@ -49,7 +56,7 @@ const globalErrorHandler = (err, req, res, next) => {
   if (process.env.NODE_ENV === 'production') {
     let error = err; // Use the original error object
     console.log(`Error 💥`, error.code);
-    
+
     if (error.message && error.message.includes('Validation failed')) {
       error = handleValidationError(error);
     }
@@ -57,8 +64,8 @@ const globalErrorHandler = (err, req, res, next) => {
       error = handleDuplicateKeyError(error);
       console.log(error);
     }
-    if (error.name === 'JsonWebTokenError'){
-      error = handleJsonWebTokenError(error)
+    if (error.name === 'JsonWebTokenError') {
+      error = handleJsonWebTokenError(error);
     }
 
     return SendProdError(error, res);
